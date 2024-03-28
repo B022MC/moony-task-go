@@ -1,0 +1,50 @@
+{
+  "client.pay.enable": true,
+  "client.guide.enable": true,
+  "client.guide.pay.enable": true,
+  "client.user.share.enable": false,
+  "client.center.share.url": ".=*",
+  "client.share.promotion.url": "*",
+  "client.wxpay.cfg.appid":"wx588d2ebd05576f6a",
+  "client.center.weixin.service": {
+    "cropid": "wxde3d24345712be49",
+    "url": "*"
+  },
+  "client.pay.type": [
+    "weixin",
+    "alipay"
+  ],
+  "client.api.url": [
+    {
+      "address": "*",
+      "name": "生产环境",
+      "default": true
+    },
+    {
+      "address": "*",
+      "name": "测试环境",
+      "default": false
+    },
+    {
+      "address": "*",
+      "name": "本地环境",
+      "default": false
+    }
+  ],
+  "client.version.upgrade": {
+    "android": {
+      "version": "1.0.0",
+      "force": false,
+      "url": "*",
+      "title": "有新版本提示",
+      "description": "1.日常更新\n2.界面优化"
+    },
+    "ios": {
+      "version": "1.0.0",
+      "force": false,
+      "url": "https://iosLink",
+      "title": "有新版本提示",
+      "description": "1.日常更新\n2.界面优化"
+    }
+  }
+}

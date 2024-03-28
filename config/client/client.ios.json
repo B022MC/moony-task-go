@@ -1,0 +1,50 @@
+{
+  "client.pay.enable": true,
+  "client.guide.enable": true,
+  "client.guide.pay.enable": true,
+  "client.user.share.enable": false,
+  "client.center.share.url": "http://www.yic3.cn",
+  "client.share.promotion.url": "http://landing.orgpeel.cn",
+  "client.wxpay.cfg.appid":"wx9150a1fab5149997",
+  "client.center.weixin.service": {
+    "cropid": "ww4cd5aec64238e3d8",
+    "url": "https://work.weixin.qq.com/kfid/kfc4cd0f5d252574ea0"
+  },
+  "client.pay.type": [
+    "weixin",
+    "alipay"
+  ],
+  "client.api.url": [
+    {
+      "address": "https://car.yic3.cn",
+      "name": "生产环境",
+      "default": true
+    },
+    {
+      "address": "https://car.orgpeel.cn",
+      "name": "测试环境",
+      "default": false
+    },
+    {
+      "address": "http://127.0.0.1:9401",
+      "name": "本地环境",
+      "default": false
+    }
+  ],
+  "client.version.upgrade": {
+    "android": {
+      "version": "1.0.0",
+      "force": false,
+      "url": "https://cdn.yic3.cn/bidnews/android/bid_release_v2.3.7_2023-06-12.apk",
+      "title": "有新版本提示",
+      "description": "1.日常更新\n2.界面优化"
+    },
+    "ios": {
+      "version": "1.0.0",
+      "force": false,
+      "url": "https://iosLink",
+      "title": "有新版本提示",
+      "description": "1.日常更新\n2.界面优化"
+    }
+  }
+}

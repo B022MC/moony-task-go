@@ -1,0 +1,19 @@
+{
+  "server.alipay.cfg": 2,
+  "server.user.default": {
+    "name": "游客",
+    "avatar": "https://cdn.yic3.cn/bidnews/upload/%E9%BB%98%E8%AE%A4%E5%A4%B4%E5%83%8F@3x.png"
+  },
+  "server.goods.list": [10038,10039,10040,10041,10042,10043],
+  "server.login.phone.verfiy": {
+    "template": "16064",
+    "testphone": "13000000000",
+    "testcode": "123456",
+    "phone2weixin": [
+      {
+        "phone": "15916952690",
+        "name": "macheng"
+      }
+    ]
+  }
+}

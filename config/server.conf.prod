@@ -1,0 +1,44 @@
+[server]
+app_id=10000
+host="http://127.0.0.1:9999"
+address = "127.0.0.1:9999"
+#0:PAINC 1:FATAL 2:ERROR 3:WARNING 4:INFO 5:DEBUG 6:TRACE
+log_level = 6
+enable_doc = true
+token_ignore = [
+    "/health",
+    "/api/launch",
+    "/api/user/cancel",
+    "/api/order/notify/wxpay",
+    "/api/order/notify/alipay",
+    "/api/ad/data/user",
+    "/api/ad/data/order",
+    "/api/order/refund/notify"
+]
+request_limit_num=50
+
+[redis]
+addr = "127.0.0.1:6379"
+db = 1
+password = ""
+
+[wx_login]
+app_id = "wx588d2ebd05576f6a"
+app_secret = "98220d5a671676ab926b2f70fed5868e"
+
+[mysql]
+host = "127.0.0.1"
+port = 3306
+user = "root"
+pass = "root"
+db   = "moonlighting"
+
+[qiniu]
+path = "qqlove/upload/"
+bucket = "moonlighting"
+domain = "https://cdn.yic3.cn/"
+save_path = "./upload"
+access_key = "rGcHDB-8LC-T3RuRGnI6240dPQ0uMtDFcsBaDi97"
+secret_key = "gfHeDHvGF75dxnjnhPSruTfzwnduqyNzsIt591CP"
+
+
