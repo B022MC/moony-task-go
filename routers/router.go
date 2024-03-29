@@ -30,11 +30,14 @@ func initApiRouter(engine *gin.Engine) {
 	// 为区域路由创建服务实例并注册路由
 	areaService := service.NewAreaService()                        // 创建区域服务实例
 	areaController := ApiController.NewAreaController(areaService) // 创建控制器实例
+	apiGroup.GET("/areas/:id", areaController.GetArea)             // 获取单个区域信息
+	apiGroup.GET("/subAreas", areaController.GetSubAreas)          // 根据父ID获取子区域列表
+	apiGroup.GET("/areasByLevel", areaController.GetAreasByLevel)  // 根据等级获取区域列表
 
-	// 注册区域路由
-	apiGroup.GET("/areas/:id", areaController.GetArea)            // 获取单个区域信息
-	apiGroup.GET("/subAreas", areaController.GetSubAreas)         // 根据父ID获取子区域列表
-	apiGroup.GET("/areasByLevel", areaController.GetAreasByLevel) // 根据等级获取区域列表
+	// 初始化 UserResume 相关服务和控制器
+	userResumeService := service.NewUserResumeService()                              // 假设你已经有了这个服务
+	userResumeController := ApiController.NewUserResumeController(userResumeService) // 假设你已经实现了这个控制器
+	apiGroup.GET("/user//resume", userResumeController.GetUserResumeByUserId)
 
 	// Assuming WorkExperienceService and WorkExperienceController have been initialized here
 	workExperienceService := service.NewWorkExperienceService()                                  // Initialize your service

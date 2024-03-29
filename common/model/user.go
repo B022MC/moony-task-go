@@ -16,7 +16,7 @@ type User struct {
 	HashId     uint64 `json:"hash_id" form:"hashId"`         // 用户hash_id
 	HashNum    int    `json:"hash_num" form:"hashNum"`       // 哈希计算值
 	Status     int    `json:"status" form:"status"`          // 状态：1=正常 2=禁用
-	NikeName   string `json:"nikeName" form:"nikeName"`      // 昵称
+	NickName   string `json:"nick_name" form:"nickName"`     // 昵称
 	Name       string `json:"name" form:"name"`              // 名字
 	Config     string `json:"config" form:"config"`          // 用户个性化配置
 	Avatar     string `json:"avatar" form:"avatar"`          // 头像

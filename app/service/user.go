@@ -56,14 +56,14 @@ func (u *User) loginByWeixin(session *common.Session, request model.LoginUserReq
 
 	if user != nil {
 		// 更新现有用户信息
-		user.Name = request.Weixin.UserInfo.NickName
+		user.NickName = request.Weixin.UserInfo.NickName
 		user.Avatar = request.Weixin.UserInfo.AvatarUrl
 		user.ActiveTime = time.Now().Unix()
 	} else {
 		// 如果用户不存在，则创建一个新用户
 		user = &model.User{
 			Unionid:    sessionResponse.Unionid,
-			Name:       request.Weixin.UserInfo.NickName,  // 微信不直接提供昵称，需要另外获取或设置默认值
+			NickName:   request.Weixin.UserInfo.NickName,  // 微信不直接提供昵称，需要另外获取或设置默认值
 			Avatar:     request.Weixin.UserInfo.AvatarUrl, // 同上
 			ActiveTime: time.Now().Unix(),
 		}

@@ -1,11 +1,10 @@
 package controller
 
 import (
-	"net/http"
-	"strconv"
-
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/cast"
 	"moony-task-go/app/service"
+	"net/http"
 )
 
 type UserResumeController struct {
@@ -28,12 +27,8 @@ func NewUserResumeController(service service.IUserResumeService) *UserResumeCont
 // @Success 200 {object} model.UserResume
 // @Router /users/{userId}/resume [get]
 func (urc *UserResumeController) GetUserResumeByUserId(c *gin.Context) {
-	userIdStr := c.Param("userId")
-	userId, err := strconv.ParseInt(userIdStr, 10, 64)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "无效的用户ID"})
-		return
-	}
+	userIdStr := c.Query("userId")
+	userId := cast.ToInt64(userIdStr)
 	userResume, err := urc.service.GetUserResumeByUserId(userId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
