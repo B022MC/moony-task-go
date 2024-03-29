@@ -27,17 +27,8 @@ func UserInstance() *User {
 * @apiDescription 用户登录
 * @apiUse baseHeader
 * @apiParam (业务参数（body）) {string} loginType 登录类型，phone：手机 weixin：微信 account：帐号密码，ios:ios授权登陆
-* @apiParam (业务参数（body）) {Object} [phone] 登录手机号
-* @apiParam (业务参数（body）) {string} [phone[phone]] 登录手机号
-* @apiParam (业务参数（body）) {string} [phone[code]] 手机验证码
 * @apiParam (业务参数（body）) {Object} [weixin] 微信登录确认码
 * @apiParam (业务参数（body）) {string} [weixin[code]] 微信登录确认码
-* @apiParam (业务参数（body）) {Object} [account] 账号密码都登陆
-* @apiParam (业务参数（body）) {string} [account[username]] 账号名
-* @apiParam (业务参数（body）) {string} [account[password]] 密码
-* @apiParam (业务参数（body）) {string} [ios] ios登陆
-* @apiParam (业务参数（body）) {string} [ios[key]]  ios登陆key
-* @apiParam (业务参数（body）) {string} [ios[email]]  邮箱
 * @apiParam (业务参数（body）) {string} [ios[nickname]]  昵称
 * @apiParamExample {json} 请求示例
 {
