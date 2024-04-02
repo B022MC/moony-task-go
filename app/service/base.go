@@ -52,7 +52,7 @@ func (b *Base) Launch(session *common.Session, req model.UserConfigReq) model.Us
 		launch.Token = common.CreateToken(user)
 		launch.UserId = cast.ToString(user.Id)
 		launch.HashId = cast.ToString(user.HashId)
-		launch.Guest = user.IsGuest()
+		//launch.Guest = user.IsGuest()
 		//b.UserDevice(session.UserHeader.AppId, user.Id, session.UserHeader.RemoteIp, req)
 	} else { //老用户
 		user, err := dao.UserInstance().Get(session.UserToken.UserId)
@@ -68,7 +68,7 @@ func (b *Base) Launch(session *common.Session, req model.UserConfigReq) model.Us
 		}
 		launch.UserId = cast.ToString(session.UserToken.UserId)
 		launch.HashId = cast.ToString(session.UserToken.HashId)
-		launch.Guest = user.IsGuest()
+		//launch.Guest = user.IsGuest()
 	}
 
 	launch.Config = session.Experiment.GetClient()

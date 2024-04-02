@@ -28,59 +28,59 @@ func initApiRouter(engine *gin.Engine) {
 	//apiGroup.Any("/user/cancel", ApiController.UserInstance().Cancel)  //微信注销用户
 
 	// 为区域路由创建服务实例并注册路由
-	areaService := service.NewAreaService()                        // 创建区域服务实例
-	areaController := ApiController.NewAreaController(areaService) // 创建控制器实例
+	areaService := service.NewAreaService()                        //
+	areaController := ApiController.NewAreaController(areaService) //
 	apiGroup.GET("/areas/:id", areaController.GetArea)             // 获取单个区域信息
 	apiGroup.GET("/subAreas", areaController.GetSubAreas)          // 根据父ID获取子区域列表
 	apiGroup.GET("/areasByLevel", areaController.GetAreasByLevel)  // 根据等级获取区域列表
 
 	// 初始化 UserResume 相关服务和控制器
-	userResumeService := service.NewUserResumeService()                              // 假设你已经有了这个服务
-	userResumeController := ApiController.NewUserResumeController(userResumeService) // 假设你已经实现了这个控制器
-	apiGroup.GET("/user//resume", userResumeController.GetUserResumeByUserId)
+	userResumeService := service.NewUserResumeService()                              //
+	userResumeController := ApiController.NewUserResumeController(userResumeService) //
+	apiGroup.GET("/user/resume", userResumeController.GetUserResumeByUserId)
 
 	// Assuming WorkExperienceService and WorkExperienceController have been initialized here
-	workExperienceService := service.NewWorkExperienceService()                                  // Initialize your service
-	workExperienceController := ApiController.NewWorkExperienceController(workExperienceService) // Initialize your controller
+	workExperienceService := service.NewWorkExperienceService()                                  //
+	workExperienceController := ApiController.NewWorkExperienceController(workExperienceService) //
 	apiGroup.POST("/workExperiences", workExperienceController.CreateWorkExperience)
-	apiGroup.GET("/workExperiences/:id", workExperienceController.GetWorkExperience)
-	apiGroup.PUT("/workExperiences/:id", workExperienceController.UpdateWorkExperience)
-	apiGroup.DELETE("/workExperiences/:id", workExperienceController.DeleteWorkExperience)
-	apiGroup.GET("/users/:userId/workExperiences", workExperienceController.GetAllWorkExperiencesByUserId)
+	apiGroup.GET("/workExperiences", workExperienceController.GetWorkExperience)
+	apiGroup.PUT("/workExperiences", workExperienceController.UpdateWorkExperience)
+	apiGroup.DELETE("/workExperiences", workExperienceController.DeleteWorkExperience)
+	apiGroup.GET("/users/workExperiences", workExperienceController.GetAllWorkExperiencesByUserId)
 
 	// 注册自我评估(SelfEvaluation)路由
-	selfEvaluationService := service.NewSelfEvaluationService()                                  // 已创建服务实例
-	selfEvaluationController := ApiController.NewSelfEvaluationController(selfEvaluationService) // 已创建控制器实例
+	selfEvaluationService := service.NewSelfEvaluationService()                                  //
+	selfEvaluationController := ApiController.NewSelfEvaluationController(selfEvaluationService) //
 	apiGroup.POST("/selfEvaluations", selfEvaluationController.CreateSelfEvaluation)
-	apiGroup.GET("/selfEvaluations/:id", selfEvaluationController.GetSelfEvaluation)
-	apiGroup.PUT("/selfEvaluations/:id", selfEvaluationController.UpdateSelfEvaluation)
-	apiGroup.DELETE("/selfEvaluations/:id", selfEvaluationController.DeleteSelfEvaluation)
-	apiGroup.GET("/users/:userId/selfEvaluations", selfEvaluationController.GetAllSelfEvaluationsByUserId)
+	apiGroup.GET("/selfEvaluations", selfEvaluationController.GetSelfEvaluation)
+	apiGroup.PUT("/selfEvaluations", selfEvaluationController.UpdateSelfEvaluation)
+	apiGroup.DELETE("/selfEvaluations", selfEvaluationController.DeleteSelfEvaluation)
+	apiGroup.GET("/users/selfEvaluations", selfEvaluationController.GetAllSelfEvaluationsByUserId)
 
 	// 注册技能证书(SkillCertificate)路由
 	skillCertificateService := service.NewSkillCertificateService()                                    // 已创建服务实例
 	skillCertificateController := ApiController.NewSkillCertificateController(skillCertificateService) // 已创建控制器实例
 	apiGroup.POST("/skillCertificates", skillCertificateController.CreateSkillCertificate)
-	apiGroup.GET("/skillCertificates/:id", skillCertificateController.GetSkillCertificate)
-	apiGroup.PUT("/skillCertificates/:id", skillCertificateController.UpdateSkillCertificate)
-	apiGroup.DELETE("/skillCertificates/:id", skillCertificateController.DeleteSkillCertificate)
-	apiGroup.GET("/users/:userId/skillCertificates", skillCertificateController.GetAllSkillCertificatesByUserId)
+	apiGroup.GET("/skillCertificates", skillCertificateController.GetSkillCertificate)
+	apiGroup.PUT("/skillCertificates", skillCertificateController.UpdateSkillCertificate)
+	apiGroup.DELETE("/skillCertificates", skillCertificateController.DeleteSkillCertificate)
+	apiGroup.GET("/users/skillCertificates", skillCertificateController.GetAllSkillCertificatesByUserId)
 
 	// 注册 JobExpectation 相关的路由
-	jobExpectationService := service.NewJobExpectationService()                                  // 假设已经有了这个函数
-	jobExpectationController := ApiController.NewJobExpectationController(jobExpectationService) // 假设已经有了这个函数
-	apiGroup.GET("/jobExpectations/:id", jobExpectationController.GetJobExpectation)
-	apiGroup.GET("/users/:userId/jobExpectations", jobExpectationController.GetAllJobExpectationsByUserId)
+	jobExpectationService := service.NewJobExpectationService()                                  //
+	jobExpectationController := ApiController.NewJobExpectationController(jobExpectationService) //
+	apiGroup.GET("/jobExpectations", jobExpectationController.GetJobExpectation)
+	apiGroup.GET("/users/jobExpectations", jobExpectationController.GetAllJobExpectationsByUserId)
 	apiGroup.POST("/jobExpectations", jobExpectationController.CreateJobExpectation)
-	apiGroup.PUT("/jobExpectations/:id", jobExpectationController.UpdateJobExpectation)
-	apiGroup.DELETE("/jobExpectations/:id", jobExpectationController.DeleteJobExpectation)
+	apiGroup.PUT("/jobExpectations", jobExpectationController.UpdateJobExpectation)
+	apiGroup.DELETE("/jobExpectations", jobExpectationController.DeleteJobExpectation)
 
 	// 注册 Education 相关的路由
-	educationService := service.NewEducationService()                             // 假设已经有了这个函数
-	educationController := ApiController.NewEducationController(educationService) // 假设已经有了这个函数
-	apiGroup.GET("/educations/:id", educationController.GetEducation)
-	apiGroup.GET("/users/:userId/educations", educationController.GetAllEducationsByUserId)
+	educationService := service.NewEducationService()                             //
+	educationController := ApiController.NewEducationController(educationService) //
+	apiGroup.GET("/educations", educationController.GetEducation)
+	apiGroup.GET("/users/educations", educationController.GetAllEducationsByUserId)
 	apiGroup.POST("/educations", educationController.CreateEducation)
-	apiGroup.PUT("/educations/:id", educationController.UpdateEducation)
-	apiGroup.DELETE("/educations/:id", educationController.DeleteEducation)
+	apiGroup.PUT("/educations", educationController.UpdateEducation)
+	apiGroup.DELETE("/educations", educationController.DeleteEducation)
 }

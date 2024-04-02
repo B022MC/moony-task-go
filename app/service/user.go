@@ -208,7 +208,7 @@ func (u *User) Format(user *model.User) map[string]interface{} {
 	data["name"] = user.Name
 	data["avatar"] = user.Avatar
 	data["phone"] = user.Phone
-	data["guest"] = user.IsGuest()
+	//data["guest"] = user.IsGuest()
 	data["sex"] = user.Sex
 	data["age"] = user.Age
 
