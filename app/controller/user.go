@@ -57,7 +57,6 @@ func UserInstance() *User {
 */
 
 func (u *User) Login(ctx *gin.Context) {
-
 	var request model.LoginUserReq
 	if err := ctx.ShouldBind(&request); err != nil {
 		panic(config.ErrParam.New().Append(err))
