@@ -41,4 +41,6 @@ save_path = "./upload"
 access_key = "rGcHDB-8LC-T3RuRGnI6240dPQ0uMtDFcsBaDi97"
 secret_key = "gfHeDHvGF75dxnjnhPSruTfzwnduqyNzsIt591CP"
 
-
+[tencent_location]
+key = "XQJBZ-KEFKC-35B2N-ATCT6-IN7LS-M3FUU"
+secret_key = "kNmUNbzc0ZPv2iMvNf3IZ9cZme800tWQ"
