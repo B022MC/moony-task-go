@@ -21,6 +21,9 @@ func initApiRouter(engine *gin.Engine) {
 	apiGroup.Use(middleware.ApiInstance().ApiBefore)
 	apiGroup.GET("/launch", ApiController.BaseInstance().Launch) //配置获取
 
+	locationController := ApiController.NewLocationController()
+	apiGroup.POST("/location/reverseGeocode", locationController.ReverseGeocode)
+
 	apiGroup.POST("/user/login", ApiController.UserInstance().Login) //用户登录
 	//apiGroup.POST("/user/logout", ApiController.UserInstance().Logout) //退出登录
 	apiGroup.GET("/user", ApiController.UserInstance().GetUserInfo)  //用户详情
@@ -28,11 +31,12 @@ func initApiRouter(engine *gin.Engine) {
 	//apiGroup.Any("/user/cancel", ApiController.UserInstance().Cancel)  //微信注销用户
 
 	// 为区域路由创建服务实例并注册路由
-	areaService := service.NewAreaService()                        //
-	areaController := ApiController.NewAreaController(areaService) //
-	apiGroup.GET("/areas/:id", areaController.GetArea)             // 获取单个区域信息
-	apiGroup.GET("/subAreas", areaController.GetSubAreas)          // 根据父ID获取子区域列表
-	apiGroup.GET("/areasByLevel", areaController.GetAreasByLevel)  // 根据等级获取区域列表
+	areaService := service.NewAreaService()
+	areaController := ApiController.NewAreaController(areaService)
+	apiGroup.GET("/areas/:id", areaController.GetArea)                       // 获取单个区域信息
+	apiGroup.GET("/subAreas", areaController.GetSubAreas)                    // 根据父ID获取子区域列表
+	apiGroup.GET("/areasByLevel", areaController.GetAreasByLevel)            // 根据等级获取区域列表
+	apiGroup.GET("/areasByFirstLetter", areaController.GetListByFirstLetter) // 新增路由：根据首字母获取区域列表
 
 	// 初始化 UserResume 相关服务和控制器
 	userResumeService := service.NewUserResumeService()                              //
@@ -83,4 +87,41 @@ func initApiRouter(engine *gin.Engine) {
 	apiGroup.POST("/educations", educationController.CreateEducation)
 	apiGroup.PUT("/educations", educationController.UpdateEducation)
 	apiGroup.DELETE("/educations", educationController.DeleteEducation)
+
+	// 初始化 Jobs 相关服务和控制器
+	jobsService := service.NewJobsService()
+	jobsController := ApiController.NewJobsController(jobsService)
+	// 注册 Jobs 相关路由
+	apiGroup.POST("/jobs/get", jobsController.GetJob)           // 通过POST方法传递jobId在请求体中获取单个兼职信息
+	apiGroup.GET("/jobs", jobsController.GetAllJobs)            // 获取所有兼职信息，不涉及敏感信息传递
+	apiGroup.POST("/jobs", jobsController.CreateJob)            // 创建兼职信息
+	apiGroup.PUT("/jobs/update", jobsController.UpdateJob)      // 通过PUT方法传递jobId在请求体中更新兼职信息
+	apiGroup.DELETE("/jobs/delete", jobsController.DeleteJob)   // 通过POST方法传递jobId在请求体中删除兼职信息
+	apiGroup.GET("/jobs/recent", jobsController.GetRecentJobs)  // 获取最近的兼职信息
+	apiGroup.POST("/jobs/nearby", jobsController.GetJobsNearby) // 通过POST方法传递经纬度和半径在请求体中获取附近的兼职信息
+
+	// 初始化 Application 相关服务和控制器
+	applicationsService := service.NewApplicationService()
+	applicationsController := ApiController.NewApplicationController(applicationsService)
+	// 注册 Application 相关路由
+	// 注册 Application 相关路由
+	apiGroup.POST("/applications/get", applicationsController.GetApplication)             // 通过POST方法传递applicationId在请求体中获取单个申请信息
+	apiGroup.POST("/applications/byJob", applicationsController.GetApplicationsByJobId)   // 通过POST方法传递jobId在请求体中获取特定兼职的所有申请
+	apiGroup.POST("/applications/byUser", applicationsController.GetApplicationsByUserId) // 通过POST方法传递userId在请求体中获取用户的所有申请
+	apiGroup.POST("/applications", applicationsController.CreateApplication)              // 创建申请
+	apiGroup.PUT("/applications/update", applicationsController.UpdateApplication)        // 通过PUT方法传递applicationId在请求体中更新申请
+	apiGroup.DELETE("/applications/delete", applicationsController.DeleteApplication)     // 通过POST方法传递applicationId在请求体中删除申请
+
+	// 初始化 Review 相关服务和控制器
+	reviewsService := service.NewReviewService()
+	reviewsController := ApiController.NewReviewController(reviewsService)
+	// 注册 Review 相关路由
+	// 注册 Review 相关路由
+	apiGroup.POST("/reviews/get", reviewsController.GetReview)             // 通过POST方法传递reviewId在请求体中获取单个评价信息
+	apiGroup.POST("/reviews/byJob", reviewsController.GetReviewsByJobId)   // 通过POST方法传递jobId在请求体中获取特定兼职的所有评价
+	apiGroup.POST("/reviews/byUser", reviewsController.GetReviewsByUserId) // 通过POST方法传递userId在请求体中获取用户的所有评价
+	apiGroup.POST("/reviews", reviewsController.CreateReview)              // 创建评价
+	apiGroup.PUT("/reviews/update", reviewsController.UpdateReview)        // 通过PUT方法传递reviewId在请求体中更新评价
+	apiGroup.DELETE("/reviews/delete", reviewsController.DeleteReview)     // 通过POST方法传递reviewId在请求体中删除评价
+
 }

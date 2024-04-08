@@ -47,6 +47,11 @@ type WxLogin struct {
 	AppSecret string `toml:"app_secret"`
 }
 
+type TencentLocation struct {
+	Key       string `toml:"key"`
+	SecretKey string `toml:"secret_key"`
+}
+
 // Qiniu 七牛云配置
 //type Qiniu struct {
 //	Path      string `toml:"path"`
@@ -98,11 +103,12 @@ type Ad struct {
 
 // Config 配置参数
 type Config struct {
-	Ad      *Ad      `toml:"ad"`
-	Server  *Server  `toml:"server"`
-	Mysql   *Mysql   `toml:"mysql"`
-	Redis   *Redis   `toml:"redis"`
-	WxLogin *WxLogin `toml:"wx_login"`
+	Ad              *Ad              `toml:"ad"`
+	Server          *Server          `toml:"server"`
+	Mysql           *Mysql           `toml:"mysql"`
+	Redis           *Redis           `toml:"redis"`
+	WxLogin         *WxLogin         `toml:"wx_login"`
+	TencentLocation *TencentLocation `toml:"tencent_Location"`
 	//Qiniu       *Qiniu       `toml:"qiniu"`
 	//Pay         *Pay         `toml:"pay"` //支付配置
 	//Qywx        *Qywx        `toml:"qywx"`
