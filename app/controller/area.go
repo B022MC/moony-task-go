@@ -55,3 +55,14 @@ func (ac *AreaController) GetAreasByLevel(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, areas)
 }
+
+// GetListByFirstLetter 根据首字母获取区域列表
+func (ac *AreaController) GetListByFirstLetter(c *gin.Context) {
+	//first := cast.ToString(c.Query("first"))
+	areas, err := ac.areaService.GetListByFirstLetter()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, areas)
+}

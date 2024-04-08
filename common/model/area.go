@@ -3,7 +3,7 @@ package model
 type Area struct {
 	Id         int    `json:"id" form:"id"`                   // ID
 	Pid        int    `json:"pid" form:"pid"`                 // 父id
-	ShortName  string `json:"shortname" form:"shortname"`     // 简称
+	Shortname  string `json:"shortname" form:"shortname"`     // 简称
 	Name       string `json:"name" form:"name"`               // 名称
 	MergerName string `json:"merger_name" form:"merger_name"` // 全称
 	Level      int    `json:"level" form:"level"`             // 层级 0 1 2 省市区县
