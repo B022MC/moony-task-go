@@ -9,7 +9,7 @@ import (
 type IAreaDAO interface {
 	Get(id int) (*model.Area, error)
 	GetList(pid int) ([]*model.Area, error)
-	GetByLevelList(level int) ([]*model.Area, error)
+	GetByMergerNameAndLevel(req model.GetByMergerNameAndLevelReq) ([]*model.Area, error)
 	GetListByFirstLetter() ([]*model.Area, error)
 }
 
@@ -38,9 +38,10 @@ func (dao *AreaDAO) GetList(pid int) ([]*model.Area, error) {
 	return areas, result.Error
 }
 
-func (dao *AreaDAO) GetByLevelList(level int) ([]*model.Area, error) {
+func (dao *AreaDAO) GetByMergerNameAndLevel(req model.GetByMergerNameAndLevelReq) ([]*model.Area, error) {
 	var areas []*model.Area
-	result := dao.DB.Table(tabName()).Where("level = ?", level).Find(&areas)
+	// 使用LIKE操作符来匹配包含mergerName的记录，并且限制Level为3
+	result := dao.DB.Table(tabName()).Where("merger_name LIKE ? AND level = ?", "%"+req.MergerName+"%", req.Level).Find(&areas)
 	return areas, result.Error
 }
 

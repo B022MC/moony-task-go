@@ -2,7 +2,9 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/cast"
 	"moony-task-go/app/service"
+	"moony-task-go/common/model"
 	"net/http"
 	"strconv"
 )
@@ -45,10 +47,12 @@ func (ac *AreaController) GetSubAreas(c *gin.Context) {
 	c.JSON(http.StatusOK, areas)
 }
 
-// GetAreasByLevel 根据等级获取区域列表
-func (ac *AreaController) GetAreasByLevel(c *gin.Context) {
-	level, _ := strconv.Atoi(c.Query("level"))
-	areas, err := ac.areaService.GetAreasByLevel(level)
+// GetByMergerNameAndLevel 根据名称和等级获取区域列表
+func (ac *AreaController) GetByMergerNameAndLevel(c *gin.Context) {
+	var req model.GetByMergerNameAndLevelReq
+	req.Level = 3
+	req.MergerName = cast.ToString(c.Query("city"))
+	areas, err := ac.areaService.GetByMergerNameAndLevel(req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

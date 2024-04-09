@@ -10,7 +10,7 @@ import (
 type IAreaService interface {
 	GetArea(id int) (*model.Area, error)
 	GetSubAreas(pid int) ([]*model.Area, error)
-	GetAreasByLevel(level int) ([]*model.Area, error)
+	GetByMergerNameAndLevel(req model.GetByMergerNameAndLevelReq) ([]*model.Area, error)
 	GetListByFirstLetter() (map[string][]*model.Area, error)
 }
 
@@ -35,10 +35,10 @@ func (s *AreaService) GetSubAreas(pid int) ([]*model.Area, error) {
 	return areaDao.GetList(pid)
 }
 
-// GetAreasByLevel GetAreasByLevel根据等级获取区域列表
-func (s *AreaService) GetAreasByLevel(level int) ([]*model.Area, error) {
+// GetByMergerNameAndLevel GetAreasByLevel根据名称和等级获取区域列表
+func (s *AreaService) GetByMergerNameAndLevel(req model.GetByMergerNameAndLevelReq) ([]*model.Area, error) {
 	areaDao := dao.NewAreaDAO(global.Db)
-	return areaDao.GetByLevelList(level)
+	return areaDao.GetByMergerNameAndLevel(req)
 }
 
 func (s *AreaService) GetListByFirstLetter() (map[string][]*model.Area, error) {

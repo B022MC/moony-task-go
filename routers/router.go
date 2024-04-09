@@ -35,7 +35,7 @@ func initApiRouter(engine *gin.Engine) {
 	areaController := ApiController.NewAreaController(areaService)
 	apiGroup.GET("/areas/:id", areaController.GetArea)                       // 获取单个区域信息
 	apiGroup.GET("/subAreas", areaController.GetSubAreas)                    // 根据父ID获取子区域列表
-	apiGroup.GET("/areasByLevel", areaController.GetAreasByLevel)            // 根据等级获取区域列表
+	apiGroup.GET("/areasByCity", areaController.GetByMergerNameAndLevel)     // 根据名称和等级获取区域列表
 	apiGroup.GET("/areasByFirstLetter", areaController.GetListByFirstLetter) // 新增路由：根据首字母获取区域列表
 
 	// 初始化 UserResume 相关服务和控制器
