@@ -50,7 +50,7 @@ func (ac *AreaController) GetSubAreas(c *gin.Context) {
 // GetByMergerNameAndLevel 根据名称和等级获取区域列表
 func (ac *AreaController) GetByMergerNameAndLevel(c *gin.Context) {
 	var req model.GetByMergerNameAndLevelReq
-	req.Level = 3
+	req.Level = cast.ToInt(c.Query("level"))
 	req.MergerName = cast.ToString(c.Query("city"))
 	areas, err := ac.areaService.GetByMergerNameAndLevel(req)
 	if err != nil {
@@ -69,4 +69,16 @@ func (ac *AreaController) GetListByFirstLetter(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, areas)
+}
+
+// GetProvincesWithCities 获取所有省份及其下属城市
+func (ac *AreaController) GetProvincesWithCities(c *gin.Context) {
+	provincesWithCities, err := ac.areaService.GetProvincesWithCities()
+	if err != nil {
+		// 处理可能出现的错误
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	// 成功获取数据后，以JSON格式返回
+	c.JSON(http.StatusOK, provincesWithCities)
 }

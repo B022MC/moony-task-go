@@ -11,6 +11,7 @@ type IAreaDAO interface {
 	GetList(pid int) ([]*model.Area, error)
 	GetByMergerNameAndLevel(req model.GetByMergerNameAndLevelReq) ([]*model.Area, error)
 	GetListByFirstLetter() ([]*model.Area, error)
+	GetProvincesWithCities() ([]*model.ProvinceWithCities, error)
 }
 
 // AreaDAO 实现结构体
@@ -57,4 +58,32 @@ func (dao *AreaDAO) GetListByFirstLetter() ([]*model.Area, error) {
 	// 按照首字母排序
 	result := dao.DB.Table(tabName()).Where("level != ?", 3).Order("first ASC").Find(&areas)
 	return areas, result.Error
+}
+
+// GetProvincesWithCities 获取所有省份及其下属城市
+func (dao *AreaDAO) GetProvincesWithCities() ([]*model.ProvinceWithCities, error) {
+	var provinces []*model.Area
+	// 首先获取所有省份
+	result := dao.DB.Table(tabName()).Where("level = ?", 1).Find(&provinces)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	var provincesWithCities []*model.ProvinceWithCities
+	for _, province := range provinces {
+		var cities []*model.Area
+		// 对每个省份，查询其下属的城市
+		result := dao.DB.Table(tabName()).Where("pid = ?", province.Id).Find(&cities)
+		if result.Error != nil {
+			return nil, result.Error
+		}
+		// 组装省份及其城市数据
+		provinceWithCities := &model.ProvinceWithCities{
+			Province: province,
+			Cities:   cities,
+		}
+		provincesWithCities = append(provincesWithCities, provinceWithCities)
+	}
+
+	return provincesWithCities, nil
 }

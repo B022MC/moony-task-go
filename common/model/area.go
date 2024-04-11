@@ -19,3 +19,9 @@ type GetByMergerNameAndLevelReq struct {
 	MergerName string `json:"merger_name" form:"merger_name" `
 	Level      int    `json:"level" form:"level"` // 层级 1 2 3 省市区县
 }
+
+// ProvinceWithCities 省份及其下属城市的结构
+type ProvinceWithCities struct {
+	Province *Area   `json:"province"`
+	Cities   []*Area `json:"cities"`
+}

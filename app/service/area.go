@@ -12,6 +12,7 @@ type IAreaService interface {
 	GetSubAreas(pid int) ([]*model.Area, error)
 	GetByMergerNameAndLevel(req model.GetByMergerNameAndLevelReq) ([]*model.Area, error)
 	GetListByFirstLetter() (map[string][]*model.Area, error)
+	GetProvincesWithCities() ([]*model.ProvinceWithCities, error)
 }
 
 // AreaService AreaService结构体
@@ -59,4 +60,10 @@ func (s *AreaService) GetListByFirstLetter() (map[string][]*model.Area, error) {
 	}
 
 	return areaMap, nil
+}
+
+// GetProvincesWithCities 获取所有省份及其下属城市
+func (s *AreaService) GetProvincesWithCities() ([]*model.ProvinceWithCities, error) {
+	areaDao := dao.NewAreaDAO(global.Db)    // 使用全局DB实例
+	return areaDao.GetProvincesWithCities() // 直接调用DAO层的方法
 }
