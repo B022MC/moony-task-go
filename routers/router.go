@@ -19,8 +19,8 @@ func initApiRouter(engine *gin.Engine) {
 	apiGroup := engine.Group("/api")
 	apiGroup.Use(middleware.ApiInstance().Recovery)
 	apiGroup.Use(middleware.ApiInstance().ApiBefore)
-	apiGroup.GET("/launch", ApiController.BaseInstance().Launch) //配置获取
-
+	apiGroup.GET("/launch", ApiController.BaseInstance().Launch)   //配置获取
+	apiGroup.POST("/upload", ApiController.ExtraInstance().Upload) //文件上传
 	locationController := ApiController.NewLocationController()
 	apiGroup.POST("/location/reverseGeocode", locationController.ReverseGeocode)
 
@@ -33,10 +33,11 @@ func initApiRouter(engine *gin.Engine) {
 	// 为区域路由创建服务实例并注册路由
 	areaService := service.NewAreaService()
 	areaController := ApiController.NewAreaController(areaService)
-	apiGroup.GET("/areas/:id", areaController.GetArea)                       // 获取单个区域信息
-	apiGroup.GET("/subAreas", areaController.GetSubAreas)                    // 根据父ID获取子区域列表
-	apiGroup.GET("/areasByCity", areaController.GetByMergerNameAndLevel)     // 根据名称和等级获取区域列表
-	apiGroup.GET("/areasByFirstLetter", areaController.GetListByFirstLetter) // 新增路由：根据首字母获取区域列表
+	apiGroup.GET("/areas/:id", areaController.GetArea)                          // 获取单个区域信息
+	apiGroup.GET("/subAreas", areaController.GetSubAreas)                       // 根据父ID获取子区域列表
+	apiGroup.GET("/areasByCity", areaController.GetByMergerNameAndLevel)        // 根据名称和等级获取区域列表
+	apiGroup.GET("/areasByFirstLetter", areaController.GetListByFirstLetter)    // 新增路由：根据首字母获取区域列表
+	apiGroup.GET("/provincesWithCities", areaController.GetProvincesWithCities) // 获取所有省份及其下属城市
 
 	// 初始化 UserResume 相关服务和控制器
 	userResumeService := service.NewUserResumeService()                              //

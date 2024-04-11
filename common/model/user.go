@@ -11,23 +11,32 @@ var (
 )
 
 type User struct {
-	Id         int64  `json:"id" form:"id"`                  // 用户id
-	AppId      int64  `json:"app_id" form:"appId"`           // 应用ID
-	HashId     uint64 `json:"hash_id" form:"hashId"`         // 用户hash_id
-	HashNum    int    `json:"hash_num" form:"hashNum"`       // 哈希计算值
-	Status     int    `json:"status" form:"status"`          // 状态：1=正常 2=禁用
-	NickName   string `json:"nick_name" form:"nickName"`     // 昵称
-	Name       string `json:"name" form:"name"`              // 名字
-	Config     string `json:"config" form:"config"`          // 用户个性化配置
-	Avatar     string `json:"avatar" form:"avatar"`          // 头像
-	Unionid    string `json:"unionid" form:"unionid"`        // 微信统一ID
-	Phone      string `json:"phone" form:"phone"`            // 手机号
-	Age        int    `json:"age" form:"age"`                // 年龄
-	Sex        int    `json:"sex" form:"sex"`                // 性别：1=男，2=女，3=未知
-	CreateTime int64  `json:"create_time" form:"createTime"` // 创建时间
-	ActiveTime int64  `json:"active_time" form:"activeTime"` // 活跃时间
-	UpdateTime int64  `json:"update_time" form:"updateTime"` // 更新时间
-	TokenMd5   string `json:"token_md5" form:"tokenMd5"`     // 用户token md5值
+	Id          int64  `json:"id" form:"id"`                    // 用户ID
+	AppId       int64  `json:"app_id" form:"appId"`             // 应用ID
+	HashId      uint64 `json:"hash_id" form:"hashId"`           // 用户hash_id
+	HashNum     int    `json:"hash_num" form:"hashNum"`         // 哈希计算值
+	Status      int    `json:"status" form:"status"`            // 状态：1=正常 2=禁用
+	Name        string `json:"name" form:"name"`                // 名称
+	NickName    string `json:"nick_name" form:"nickName"`       // 微信昵称
+	Config      string `json:"config" form:"config"`            // 用户个性化配置
+	Avatar      string `json:"avatar" form:"avatar"`            // 头像
+	CurrentCity string `json:"current_city" form:"currentCity"` // 当前所在城市
+	Birthday    int64  `json:"birthday" form:"birthday"`        // 出生年月
+	EduStatus   int    `json:"edu_status" form:"eduStatus"`     // 教育状态：0=已毕业，1=在读
+	Email       string `json:"email" form:"email"`              // 电子邮箱
+	Unionid     string `json:"unionid" form:"unionid"`          // 微信统一ID
+	Qq          string `json:"qq" form:"qq"`                    // QQ号
+	WechatId    string `json:"wechat_id" form:"wechatId"`       // 微信号
+	EduGrade    string `json:"edu_grade" form:"eduGrade"`       // 学位
+	Height      int    `json:"height" form:"height"`            // 身高
+	Phone       string `json:"phone" form:"phone"`              // 手机号
+	Age         int    `json:"age" form:"age"`                  // 年龄
+	Sex         int    `json:"sex" form:"sex"`                  // 性别：1=男，2=女，3=未知
+	Platform    string `json:"platform" form:"platform"`        // 平台
+	CreateTime  int64  `json:"create_time" form:"createTime"`   // 创建时间
+	ActiveTime  int64  `json:"active_time" form:"activeTime"`   // 活跃时间
+	UpdateTime  int64  `json:"update_time" form:"updateTime"`   // 更新时间
+	TokenMd5    string `json:"token_md5" form:"tokenMd5"`       // 用户token md5值
 }
 
 type UserRes struct {

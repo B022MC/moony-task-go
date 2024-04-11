@@ -10,6 +10,8 @@ import (
 	"moony-task-go/core/common"
 	"moony-task-go/core/config"
 	"moony-task-go/utils"
+	"reflect"
+	"strings"
 	"time"
 )
 
@@ -105,9 +107,85 @@ func (u *User) GetUserInfo(session *common.Session) (map[string]interface{}, err
 
 // SaveUserInfo 更新用户信息
 func (u *User) SaveUserInfo(session *common.Session, params map[string]interface{}) error {
-	user, err := dao.UserInstance().Get(session.GetUserId())
+	if params == nil {
+		log.Warn("No parameters provided for update.")
+		return nil // 如果没有提供更新参数，则直接返回
+	}
+
+	userID := session.GetUserId()
+	user, err := dao.UserInstance().Get(userID)
 	if err != nil {
-		log.Errorf("SaveUserInfo dao.UserInstance().Get error=[%s]", err.Error())
+		log.Errorf("SaveUserInfo dao.UserInstance().Get error=[%s] for user ID: %d", err.Error(), userID)
+		return err
+	}
+	if user == nil {
+		log.Errorf("User not found with ID: %d", userID)
+		return errors.New("用户信息不存在")
+	}
+
+	// 解析现有用户配置
+	userCnf := make(map[string]interface{})
+	if user.Config != "" {
+		if err := json.Unmarshal([]byte(user.Config), &userCnf); err != nil {
+			log.Errorf("Failed to unmarshal user config: %s", err.Error())
+			return err
+		}
+	}
+
+	updated := false // 标志是否需要更新数据库
+	now := time.Now().Unix()
+	for k, v := range params {
+		switch k {
+		case "name", "avatar", "phone", "email", "wechat_id":
+			if stringValue, ok := cast.ToStringE(v); ok == nil {
+				// 使用 strings.Title 确保字段名首字母大写
+				if reflect.ValueOf(user).Elem().FieldByName(strings.Title(k)).String() != stringValue {
+					setUserField(strings.Title(k), stringValue, user, now)
+					updated = true
+				}
+			}
+		case "birthday":
+			if stringValue, ok := cast.ToStringE(v); ok == nil {
+				if t, err := time.Parse("2006-01-02", stringValue); err == nil && user.Birthday != t.Unix() {
+					user.Birthday = t.Unix()
+					user.UpdateTime = now
+					updated = true
+				}
+			}
+		case "eduStatus", "eduGrade":
+			if stringValue, ok := cast.ToStringE(v); ok == nil {
+				setUserField(strings.Title(k), stringValue, user, now)
+				updated = true
+			}
+		case "height", "age", "edu_status", "sex":
+			if intValue, ok := cast.ToIntE(v); ok == nil {
+				setUserField(strings.Title(k), intValue, user, now)
+				updated = true
+			}
+		default:
+			if oldValue, exists := userCnf[k]; !exists || oldValue != v {
+				userCnf[k] = v
+				updated = true
+			}
+		}
+	}
+
+	if updated {
+		user.Config = utils.EncodeJSON(userCnf)
+		if err := dao.UserInstance().Update(user); err != nil {
+			log.Errorf("SaveUserInfo dao.UserInstance().Update error=[%s]", err.Error())
+			return err
+		}
+	}
+
+	return nil
+}
+
+// UpdateUserInfo 根据提供的参数更新用户信息。
+func (u *User) UpdateUserInfo(userId int64, params map[string]interface{}) error {
+	user, err := dao.UserInstance().Get(userId)
+	if err != nil {
+		log.Errorf("UpdateUserInfo dao.UserInstance().Get error=[%s]", err.Error())
 		return err
 	}
 	if user == nil {
@@ -122,81 +200,62 @@ func (u *User) SaveUserInfo(session *common.Session, params map[string]interface
 
 	now := time.Now().Unix()
 	for k, v := range params {
-		if k == "name" {
-			user.Name = cast.ToString(v)
-			user.UpdateTime = now
-		} else if k == "avatar" {
-			user.Avatar = cast.ToString(v)
-			user.UpdateTime = now
-		} else if k == "phone" {
-			user.Phone = cast.ToString(v)
-			user.UpdateTime = now
-		} else if k == "age" {
-			user.Age = cast.ToInt(v)
-			user.UpdateTime = now
-		} else if k == "sex" || k == "gender" {
-			user.Sex = cast.ToInt(v)
-			user.UpdateTime = now
-		} else {
+		switch k {
+		case "name", "avatar", "phone", "email", "wechat_id":
+			if stringValue, ok := cast.ToStringE(v); ok == nil {
+				setUserField(k, stringValue, user, now)
+			}
+		case "birthday":
+			if stringValue, ok := cast.ToStringE(v); ok == nil {
+				if t, err := time.Parse("2006-01-02", stringValue); err == nil {
+					user.Birthday = t.Unix() // 将解析的时间转换为时间戳
+					user.UpdateTime = now
+				} else {
+					log.Errorf("Error parsing birthday: %v", err)
+				}
+			}
+		case "edu_status", "eduGrade", "height":
+			if stringValue, ok := cast.ToStringE(v); ok == nil {
+				setUserField(k, stringValue, user, now)
+			}
+		case "sex", "age":
+			if intValue, ok := cast.ToIntE(v); ok == nil {
+				setUserField(k, intValue, user, now)
+			}
+		default:
 			userCnf[k] = v
 		}
 	}
 	user.Config = utils.EncodeJSON(userCnf)
 
 	if err := dao.UserInstance().Update(user); err != nil {
-		log.Errorf("save user param=[%s] err=[%s]", utils.EncodeJSON(user), err.Error())
+		log.Errorf("UpdateUserInfo save user param=[%s] err=[%s]", utils.EncodeJSON(user), err.Error())
 		return err
 	}
 
 	return nil
 }
 
-// UpdateUserInfo 更新用户信息
-func (u *User) UpdateUserInfo(userId int64, params map[string]interface{}) error {
-	user, err := dao.UserInstance().Get(userId)
-	if err != nil {
-		log.Errorf("SaveUserInfo dao.UserInstance().Get error=[%s]", err.Error())
-		return err
-	}
+// setUserField 根据键和值动态设置用户字段，并更新更新时间。
+func setUserField(fieldKey string, fieldValue interface{}, user *model.User, updateTime int64) {
 	if user == nil {
-		return errors.New("用户信息不存在")
-	}
-	if params == nil {
-		return nil
+		log.Error("setUserField: user is nil")
+		return
 	}
 
-	userCnf := make(map[string]interface{})
-	_ = json.Unmarshal([]byte(user.Config), &userCnf)
-
-	now := time.Now().Unix()
-	for k, v := range params {
-		if k == "name" {
-			user.Name = cast.ToString(v)
-			user.UpdateTime = now
-		} else if k == "avatar" {
-			user.Avatar = cast.ToString(v)
-			user.UpdateTime = now
-		} else if k == "phone" {
-			user.Phone = cast.ToString(v)
-			user.UpdateTime = now
-		} else if k == "age" {
-			user.Age = cast.ToInt(v)
-			user.UpdateTime = now
-		} else if k == "sex" || k == "gender" {
-			user.Sex = cast.ToInt(v)
-			user.UpdateTime = now
-		} else {
-			userCnf[k] = v
-		}
-	}
-	user.Config = utils.EncodeJSON(userCnf)
-
-	if err := dao.UserInstance().Update(user); err != nil {
-		log.Errorf("save user param=[%s] err=[%s]", utils.EncodeJSON(user), err.Error())
-		return err
+	field := reflect.ValueOf(user).Elem().FieldByName(strings.Title(fieldKey))
+	if !field.IsValid() {
+		log.Errorf("setUserField: no such field %s in user struct", fieldKey)
+		return
 	}
 
-	return nil
+	if !field.CanSet() {
+		log.Errorf("setUserField: cannot set field %s", fieldKey)
+		return
+	}
+
+	field.Set(reflect.ValueOf(fieldValue))
+	user.UpdateTime = updateTime
 }
 
 // Format 格式化用户返回数据
@@ -208,9 +267,15 @@ func (u *User) Format(user *model.User) map[string]interface{} {
 	data["name"] = user.Name
 	data["avatar"] = user.Avatar
 	data["phone"] = user.Phone
+	data["birthday"] = utils.TimeToDate(user.Birthday)
+	data["edu_status"] = user.EduStatus
+	data["eduGrade"] = user.EduGrade
+	data["height"] = user.Height
+	data["email"] = user.Email
 	//data["guest"] = user.IsGuest()
 	data["sex"] = user.Sex
 	data["age"] = user.Age
+	data["wechat_id"] = user.WechatId
 
 	if user.Name == "" {
 		data["name"] = UserNameDefault
