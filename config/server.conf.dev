@@ -34,9 +34,9 @@ pass = "root"
 db   = "moonlighting"
 
 [qiniu]
-path = "qqlove/upload/"
-bucket = "moonlighting"
-domain = "https://cdn.yic3.cn/"
+path = "moonytask/upload/"
+bucket = "moonytask"
+domain = "sbq6vizbx.hd-bkt.clouddn.com/"
 save_path = "./upload"
 access_key = "rGcHDB-8LC-T3RuRGnI6240dPQ0uMtDFcsBaDi97"
 secret_key = "gfHeDHvGF75dxnjnhPSruTfzwnduqyNzsIt591CP"
