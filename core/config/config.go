@@ -53,14 +53,14 @@ type TencentLocation struct {
 }
 
 // Qiniu 七牛云配置
-//type Qiniu struct {
-//	Path      string `toml:"path"`
-//	Bucket    string `toml:"bucket"`
-//	Domain    string `toml:"domain"`
-//	SavePath  string `toml:"save_path"`
-//	AccessKey string `toml:"access_key"`
-//	SecretKey string `toml:"secret_key"`
-//}
+type Qiniu struct {
+	Path      string `toml:"path"`
+	Bucket    string `toml:"bucket"`
+	Domain    string `toml:"domain"`
+	SavePath  string `toml:"save_path"`
+	AccessKey string `toml:"access_key"`
+	SecretKey string `toml:"secret_key"`
+}
 
 // Qywx 企业微信配置
 //type Qywx struct {
@@ -109,7 +109,7 @@ type Config struct {
 	Redis           *Redis           `toml:"redis"`
 	WxLogin         *WxLogin         `toml:"wx_login"`
 	TencentLocation *TencentLocation `toml:"tencent_Location"`
-	//Qiniu       *Qiniu       `toml:"qiniu"`
+	Qiniu           *Qiniu           `toml:"qiniu"`
 	//Pay         *Pay         `toml:"pay"` //支付配置
 	//Qywx        *Qywx        `toml:"qywx"`
 	//Elastic     *Elastic     `toml:"elastic"`
