@@ -88,5 +88,5 @@ func (jec *JobExpectationController) DeleteJobExpectation(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "Job expectation deleted successfully"})
+	c.JSON(http.StatusOK, gin.H{"message": "JobRsp expectation deleted successfully"})
 }
