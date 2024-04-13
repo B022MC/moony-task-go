@@ -39,6 +39,14 @@ func initApiRouter(engine *gin.Engine) {
 	apiGroup.GET("/areasByFirstLetter", areaController.GetListByFirstLetter)    // 新增路由：根据首字母获取区域列表
 	apiGroup.GET("/provincesWithCities", areaController.GetProvincesWithCities) // 获取所有省份及其下属城市
 
+	// 为行业类型路由创建服务实例并注册路由
+	industryTypeService := service.NewIndustryTypeService() // 确保这里正确创建了服务实例
+	industryTypeController := ApiController.NewIndustryTypeController(industryTypeService)
+	// 注册行业类型相关的路由
+	apiGroup.POST("/industrytypes", industryTypeController.AddIndustryType)                          // 添加行业类型
+	apiGroup.GET("/industrytypes/:id", industryTypeController.GetIndustryTypeById)                   // 根据ID获取行业类型
+	apiGroup.GET("/industrytypes/categories", industryTypeController.GetAllIndustriesWithCategories) // 获取所有行业及其关联类别
+
 	// 初始化 UserResume 相关服务和控制器
 	userResumeService := service.NewUserResumeService()                              //
 	userResumeController := ApiController.NewUserResumeController(userResumeService) //
@@ -100,6 +108,7 @@ func initApiRouter(engine *gin.Engine) {
 	apiGroup.DELETE("/jobs/delete", jobsController.DeleteJob)   // 通过POST方法传递jobId在请求体中删除兼职信息
 	apiGroup.GET("/jobs/recent", jobsController.GetRecentJobs)  // 获取最近的兼职信息
 	apiGroup.POST("/jobs/nearby", jobsController.GetJobsNearby) // 通过POST方法传递经纬度和半径在请求体中获取附近的兼职信息
+	apiGroup.POST("/jobs/filter", jobsController.FilterJobs)    // 根据多个条件筛选兼职信息
 
 	// 初始化 Application 相关服务和控制器
 	applicationsService := service.NewApplicationService()
