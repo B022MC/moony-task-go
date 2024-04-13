@@ -12,6 +12,8 @@ type IAreaDAO interface {
 	GetByMergerNameAndLevel(req model.GetByMergerNameAndLevelReq) ([]*model.Area, error)
 	GetListByFirstLetter() ([]*model.Area, error)
 	GetProvincesWithCities() ([]*model.ProvinceWithCities, error)
+	GetAreaIDs(pid int) ([]int, error)
+	GetAreaNameById(id int) (string, error)
 }
 
 // AreaDAO 实现结构体
@@ -37,6 +39,31 @@ func (dao *AreaDAO) GetList(pid int) ([]*model.Area, error) {
 	var areas []*model.Area
 	result := dao.DB.Table(tabName()).Where("pid = ?", pid).Find(&areas)
 	return areas, result.Error
+}
+
+// GetAreaNameById 根据 id 获取区域 名称
+func (dao *AreaDAO) GetAreaNameById(id int) (string, error) {
+	var areaName string
+	result := dao.DB.Table(tabName()).Where("id = ?", id).First("shortname", &areaName)
+	if result.Error != nil {
+		return "", result.Error // 查询出错时返回错误
+	}
+	return areaName, nil
+}
+
+// GetAreaIDs 根据 pid 获取区域 ID 列表
+func (dao *AreaDAO) GetAreaIDs(pid int) ([]int, error) {
+	// 创建一个空的 int 切片用于存储区域 ID
+	var areaIDs []int
+
+	// 执行数据库查询，直接将结果扫描到 areaIDs 切片中
+	result := dao.DB.Table(tabName()).Where("pid = ?", pid).Pluck("id", &areaIDs)
+	if result.Error != nil {
+		return nil, result.Error // 查询出错时返回错误
+	}
+
+	// 返回填充好的区域 ID 切片和 nil 错误
+	return areaIDs, nil
 }
 
 func (dao *AreaDAO) GetByMergerNameAndLevel(req model.GetByMergerNameAndLevelReq) ([]*model.Area, error) {
