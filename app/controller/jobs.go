@@ -115,5 +115,26 @@ func (jc *JobsController) DeleteJob(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "Job deleted successfully"})
+	c.JSON(http.StatusOK, gin.H{"message": "JobRsp deleted successfully"})
+}
+
+// FilterJobs 根据多个条件筛选兼职信息
+func (jc *JobsController) FilterJobs(c *gin.Context) {
+	var req model.JobFilterRequest
+	var comReq model.ComReq
+
+	// 解析请求中的筛选条件和通用请求参数
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request data"})
+		return
+	}
+	// 这里假设 comReq 包含分页或其他通用参数，可以根据需要从c中提取
+
+	jobs, err := jc.service.FilterJobs(req, comReq)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, jobs)
 }

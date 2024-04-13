@@ -15,6 +15,7 @@ type IJobsService interface {
 	CreateJob(job *model.Jobs) (*model.Jobs, error)
 	UpdateJob(job *model.Jobs) (*model.Jobs, error)
 	DeleteJob(jobId int64) error
+	FilterJobs(req model.JobFilterRequest, comReq model.ComReq) ([]*model.JobRsp, error)
 }
 
 type JobsService struct {
@@ -51,4 +52,10 @@ func (s *JobsService) UpdateJob(job *model.Jobs) (*model.Jobs, error) {
 
 func (s *JobsService) DeleteJob(jobId int64) error {
 	return dao.NewJobsDAO(global.Db).Delete(jobId)
+}
+
+// FilterJobs 在 JobsService 结构体中实现 FilterJobs 方法
+func (s *JobsService) FilterJobs(req model.JobFilterRequest, comReq model.ComReq) ([]*model.JobRsp, error) {
+	// 调用 DAO 层的 FilterJobs 方法
+	return dao.NewJobsDAO(global.Db).FilterJobs(req, comReq)
 }
